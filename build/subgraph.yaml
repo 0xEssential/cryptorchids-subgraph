@@ -2,13 +2,13 @@ specVersion: 0.0.2
 description: CryptOrchids subgraph for on chain Flower data
 repository: https://github.com/sbauch/cryptorchids-subgraph
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: CryptOrchidERC721
     network: rinkeby
     source:
-      address: '0x010D59DC989f6cFdDBb0d0E5A9c9Be0c1CF9840F'
+      address: "0x010D59DC989f6cFdDBb0d0E5A9c9Be0c1CF9840F"
       abi: CryptOrchidERC721
       startBlock: 8353687
     mapping:
@@ -19,7 +19,7 @@ dataSources:
         - Gravatar
       abis:
         - name: CryptOrchidERC721
-          file: ./abis/CryptOrchidERC721.json
+          file: CryptOrchidERC721/abis/CryptOrchidERC721.json
       eventHandlers:
         - event: Planted(uint256,string,uint256,address)
           handler: handlePlanted
@@ -29,4 +29,4 @@ dataSources:
           handler: handleWatered
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransferred
-      file: ./src/mapping.ts
+      file: CryptOrchidERC721/CryptOrchidERC721.wasm

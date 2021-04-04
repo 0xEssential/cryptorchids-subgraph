@@ -1,22 +1,46 @@
-import { NewGravatar, UpdatedGravatar } from '../generated/Gravity/Gravity'
-import { Gravatar } from '../generated/schema'
+import { Planted, Killed, Watered, Transfer } from '../generated/CryptOrchidERC721/CryptOrchidERC721';
+import { CryptOrchid } from '../generated/schema'
 
-export function handleNewGravatar(event: NewGravatar): void {
-  let gravatar = new Gravatar(event.params.id.toHex())
-  gravatar.owner = event.params.owner
-  gravatar.displayName = event.params.displayName
-  gravatar.imageUrl = event.params.imageUrl
-  gravatar.save()
+// const speciesIPFSConstant = "ipfs://QmVts4pv2LXad6FhRqChKY9HuTzfYc6mQHprN5jks2Ma8H/"
+// const deadSpeciesIPFSConstant = "ipfs://QmUWi5ht9oap6qDRWboqHHMh7FMdMZSuwGSJhTJz1JjxHX/"
+
+export function handlePlanted(event: Planted): void {
+  let flower = new CryptOrchid(event.params.tokenId.toHex())
+  
+  let latinSpecies = event.params.latinSpecies;
+  flower.tokenId = event.params.tokenId.toI32();
+  flower.growthStage = "FLOWERING";
+  flower.waterLevel = 0;
+  flower.plantedAt = event.params.timestamp.toI32();
+  flower.owner = event.params.tokenOwner;
+  flower.latinSpeciesName = latinSpecies;
+  flower.save()
 }
 
-export function handleUpdatedGravatar(event: UpdatedGravatar): void {
-  let id = event.params.id.toHex()
-  let gravatar = Gravatar.load(id)
-  if (gravatar == null) {
-    gravatar = new Gravatar(id)
+export function handleKilled(event: Killed): void {
+  let id = event.params.tokenId.toHex()
+  let flower = CryptOrchid.load(id)
+  if (flower) {
+    flower.growthStage = "DEAD";
+    flower.save()
   }
-  gravatar.owner = event.params.owner
-  gravatar.displayName = event.params.displayName
-  gravatar.imageUrl = event.params.imageUrl
-  gravatar.save()
 }
+
+export function handleWatered(event: Watered): void {
+  let id = event.params.tokenId.toHex()
+  let flower = CryptOrchid.load(id)
+  if (flower) {
+    flower.waterLevel = event.params.waterLevel.toI32();
+  flower.save()
+  }
+}
+
+export function handleTransferred(event: Transfer): void {
+  let id = event.params.tokenId.toHex()
+  let flower = CryptOrchid.load(id)
+  if(flower) {
+    flower.owner = event.params.to;
+    flower.save()
+  }
+}
+
