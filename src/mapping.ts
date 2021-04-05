@@ -41,7 +41,7 @@ export function handleTransferred(event: Transfer): void {
   if(flower) {
     flower.owner = event.params.to;
     
-    if (event.params.to.toHexString() === NULL_ADDRESS) {
+    if (event.params.to.toHexString() == NULL_ADDRESS) {
       flower.growthStage = "DEAD";
     }
     flower.save()
