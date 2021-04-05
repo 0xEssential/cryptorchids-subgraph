@@ -1,8 +1,8 @@
 import { Planted, Killed, Watered, Transfer } from '../generated/CryptOrchidERC721/CryptOrchidERC721';
 import { CryptOrchid } from '../generated/schema'
+import { Address } from '@graphprotocol/graph-ts'
 
-// const speciesIPFSConstant = "ipfs://QmVts4pv2LXad6FhRqChKY9HuTzfYc6mQHprN5jks2Ma8H/"
-// const deadSpeciesIPFSConstant = "ipfs://QmUWi5ht9oap6qDRWboqHHMh7FMdMZSuwGSJhTJz1JjxHX/"
+const NULL_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 export function handlePlanted(event: Planted): void {
   let flower = new CryptOrchid(event.params.tokenId.toHex())
@@ -31,7 +31,7 @@ export function handleWatered(event: Watered): void {
   let flower = CryptOrchid.load(id)
   if (flower) {
     flower.waterLevel = event.params.waterLevel.toI32();
-  flower.save()
+    flower.save()
   }
 }
 
@@ -40,6 +40,10 @@ export function handleTransferred(event: Transfer): void {
   let flower = CryptOrchid.load(id)
   if(flower) {
     flower.owner = event.params.to;
+    
+    if (event.params.to.toHexString() === NULL_ADDRESS) {
+      flower.growthStage = "DEAD";
+    }
     flower.save()
   }
 }
