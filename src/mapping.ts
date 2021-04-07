@@ -1,6 +1,5 @@
 import { Planted, Killed, Watered, Transfer } from '../generated/CryptOrchidERC721/CryptOrchidERC721';
 import { CryptOrchid } from '../generated/schema'
-import { Address } from '@graphprotocol/graph-ts'
 
 const NULL_ADDRESS = '0x0000000000000000000000000000000000000000';
 
